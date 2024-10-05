@@ -15,7 +15,7 @@ let chatStatus = {}
 let walletChats = {}
 
 const getWalletForUser = async (username) => {
-  let userAddr = await myContract.methods.userAddress(username).call();
+  let userAddr = await myContract.methods.userAddress(username.toLowerCase()).call();
   if (userAddr == "0x0000000000000000000000000000000000000000") {
     throw({});
   }
@@ -26,7 +26,7 @@ const getWalletForUser = async (username) => {
 const loginThisUser = async (username, tgId) => {
   // check chain for user
   // if exists, check hash of tgId
-  let wallet = await getWalletForUser(username.toLowerCase())
+  let wallet = await getWalletForUser(username)
   console.log(wallet);
   let userData = await myContract.methods.userData(wallet).call();
   console.log(userData);
@@ -54,20 +54,20 @@ bot.on('message', (msg) => {
           chatStatus[chatId].entryMode = "";
           bot.sendMessage(chatId, 'You\'re logged in! Type /chat to start a chat');
         }).catch(error => {
-          bot.sendMessage(chatId, 'Unable to login, please check platform username & try re-entering your telegram ID to the platform');
+          bot.sendMessage(chatId, 'Unable to login, please check that your ChainedIn username is correct & try re-entering your Telegram ID to the web platform');
         })
       break;
       case '/chat':
         getWalletForUser(messageText).then(walletId => {
           if (walletChats[walletId]) {
-            bot.sendMessage(chatId, `Chat initiated with ${messageText}, reply to this message to send a message to ${messageText}`).then(result => {
+            bot.sendMessage(chatId, `Chat initiated with ${messageText}, reply to this message to send a message to ${messageText}. In the future, use the reply function on their messages to continue messaging them.`).then(result => {
               chatStatus[chatId].messages[result.message_id] = walletId;
             })
           } else {
-            bot.sendMessage(chatId, `User ${messageText} has not logged in to the telegram bot. Please try agian later`);
+            bot.sendMessage(chatId, `User ${messageText} has not logged in to the the ChainedIn bot. Please try again later`);
           }
         }).catch(() => {
-          bot.sendMessage(chatId, `User ${messageText} was not found, please check their platform username and try again`);
+          bot.sendMessage(chatId, `User ${messageText} was not found, please check their ChainedIn username and try again`);
         })
         chatStatus[chatId].entryMode = "";
       break;
@@ -78,11 +78,11 @@ bot.on('message', (msg) => {
   switch(firstWord) {
     case '/start':
       if (chatStatus[chatId] == undefined) {
-        bot.sendMessage(chatId, 'Welcome to the bot! Please type your platform username to login');
+        bot.sendMessage(chatId, 'Welcome to the bot! Please type your ChainedIn username to login');
       } else {
         delete(walletChats[walletId])
         delete(chatStatus[chatId])
-        bot.sendMessage(chatId, 'You\'ve been logged out! Please type your platform username to login');
+        bot.sendMessage(chatId, 'You\'ve been logged out! Please type your ChainedIn username to login');
       }
       chatStatus[chatId] = {entryMode: firstWord, messages: {}};
     break;
@@ -90,7 +90,7 @@ bot.on('message', (msg) => {
       if (chatStatus[chatId] == undefined) {
         bot.sendMessage(chatId, 'Please type /start to login');
       } else {
-        bot.sendMessage(chatId, 'Enter the platform username of a user you\'d like to chat with');
+        bot.sendMessage(chatId, 'Enter the ChainedIn username of a user you\'d like to chat with');
         chatStatus[chatId].entryMode = firstWord;
       }
     break;
