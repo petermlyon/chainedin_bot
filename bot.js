@@ -26,7 +26,7 @@ const getWalletForUser = async (username) => {
 const loginThisUser = async (username, tgId) => {
   // check chain for user
   // if exists, check hash of tgId
-  let wallet = await getWalletForUser(username)
+  let wallet = await getWalletForUser(username.toLowerCase())
   console.log(wallet);
   let userData = await myContract.methods.userData(wallet).call();
   console.log(userData);
