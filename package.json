@@ -1,0 +1,11 @@
+{
+  "name": "NodeBot",
+  "version": "1.0.0",
+  "main": "bot.js",
+  "license": "MIT",
+  "dependencies": {
+    "argon2": "^0.41.1",
+    "node-telegram-bot-api": "^0.66.0",
+    "web3": "^4.13.0"
+  }
+}
