@@ -81,7 +81,7 @@ bot.on('message', (msg) => {
   switch(firstWord) {
     case '/start':
       if (chatStatus[chatId] == undefined) {
-        bot.sendMessage(chatId, 'Welcome to the bot! Please type your ChainedIn username to login');
+        bot.sendMessage(chatId, 'Welcome to the ChainedIn bot! Please type your ChainedIn username to login');
       } else {
         walletChats[walletId] = undefined
         chatStatus[chatId] = undefined
