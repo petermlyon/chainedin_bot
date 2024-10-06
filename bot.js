@@ -83,8 +83,8 @@ bot.on('message', (msg) => {
       if (chatStatus[chatId] == undefined) {
         bot.sendMessage(chatId, 'Welcome to the bot! Please type your ChainedIn username to login');
       } else {
-        delete(walletChats[walletId])
-        delete(chatStatus[chatId])
+        walletChats[walletId] = undefined
+        chatStatus[chatId] = undefined
         bot.sendMessage(chatId, 'You\'ve been logged out! Please type your ChainedIn username to login');
       }
       chatStatus[chatId] = {entryMode: firstWord, messages: {}};
