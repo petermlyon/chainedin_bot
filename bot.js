@@ -31,8 +31,11 @@ const loginThisUser = async (username, tgId) => {
   let userData = await myContract.methods.userData(wallet).call();
   console.log(userData);
   if (userData.tgHash) {
-    await argon2.verify(userData.tgHash, tgId)
-    return wallet;
+    if (await argon2.verify(userData.tgHash, tgId)) {
+      return wallet;
+    } else {
+      throw({})
+    }
   } else {
     throw({});
   }
